@@ -1,0 +1,64 @@
+
+#### 8. Category Reversion to Cover & Interior Tab Sizing
+- **File**: `app/components/home/Category.tsx`
+- **Change**: 
+    - Reverted `object-fit` to `cover` for all category images as per user request.
+    - Updated the "Interior" (인테리어) tab to use the same sizing dimensions as the "Branding" (브랜딩) tab (26rem width, 19.5rem height).
+- **Reason**: User feedback indicated a preference for `object-fit: cover` and ensuring the Interior category matches the Branding category's visual weight.
+
+#### 9. Benefits Section Implementation (Layout 10)
+- **File**: `app/components/home/Benefits.tsx`
+- **Change**: 
+    - Converted component to Client Component (`use client`) to support `framer-motion`.
+    - Added scroll-triggered entrance animations (fade-in up for text, fade-in for image).
+    - Renamed image asset to `benefits_meeting.avif` and updated dimensions to 600x600 to align with CSS `aspect-ratio: 1`.
+    - Enforced `object-fit: cover` on the image.
+- **Reason**: To match the dynamic feel of the Webflow design and ensure pixel-perfect image rendering.
+
+#### 10. Category Images & Animation Refinement
+- **File**: `app/components/home/Category.tsx`
+- **Change**: 
+    - **Web Design Tab**: Replaced generic placeholders with specific project images (e.g., Fairpass, Electronic Contract).
+    - **Web/App Development Tab**: replaced placeholders with app-specific screenshots (e.g., Zikpay, Baro).
+    - **Proposal Tab**: Updated image dimensions to `36rem` width and `20rem` height.
+    - **Marquee Animation**: Implemented dynamic duration calculation (`images.length * 3.5s`) to ensure consistent scrolling speed across all tabs, matching the "Branding" tab's pace.
+    - **Web Design & App Dev Tabs**: Applied `object-position: 50% 0%` (top-center) to prioritize showing the top part of long screenshots (e.g., full-page designs).
+    - **Web/App Development Tab**: replaced placeholders with app-specific screenshots (e.g., Zikpay, Baro).
+    - **Proposal Tab**: Updated image dimensions to `36rem` width and `20rem` height.
+    - **Marquee Animation**: Implemented dynamic duration calculation (`images.length * 3.5s`) to ensure consistent scrolling speed across all tabs, matching the "Branding" tab's pace.
+    - **Web Design & App Dev Tabs**: Applied `object-position: 50% 0%` (top-center) to prioritize showing the top part of long screenshots (e.g., full-page designs).
+    - **Web Design Images**: Replaced all existing images with 12 new files (`webdesign-001.avif` through `webdesign-012.avif`) provided by the user.
+    - **Scrollbar Hiding**: Updated `.layout504_tabs-menu.no-scrollbar` in CSS to hide scrollbars (`display: none` for webkit, `scrollbar-width: none` for FF) while maintaining scroll functionality.
+    - **Proposal Tab Updates**: Updated dimensions to **`34rem x 19.7rem`** effectively matching the initially identified ratio from the 58% padding logic (34 * 0.58 = 19.72). This confirms that 19.7rem is the key to balancing the visual weight and border alignment.
+- **Comparison Section (Layout 12)**:
+    - **Image Update**: Renamed `/images/광고카피-1_1.avif` to `/images/comparison-main.avif` for ASCII safety.
+    - **Dimensions**: Updated image dimensions to `600x600` in the `Image` component to match the intended aspect ratio.
+    - **Animation**: Implemented scroll-triggered animations using `framer-motion` (text fades up, image fades in from right), consistent with the 'Benefits' section.
+- **Homepage Structure Update**:
+    - **Reordering**: Reorganized `app/page.tsx` to include all 15 requested sections in the strict order provided by the user.
+    - **Added Components**: Imported previously unused components: `Features` (Layout240), `CTA` (Layout3), `ServiceGallery` (Gallery6), `ImageGallery` (Gallery22), `Pricing` (Pricing25), `Process` (Layout297), `FAQ` (FAQ3), `Logos` (Logo3).
+    - **Removed Component**: Removed `<About />` (section_header49) as per user request to delete it.
+    - **Fixed Logos Visibility**: Changed `.section_logo3` in `design-care.webflow.css` from `display: none` to `display: block` to correctly reveal the section as per user instruction. Also updated `<Logos />` component to use visible styles.
+    - **Branding Tab Updates**: Replaced all 12 images in the 'Branding' tab (`Category.tsx`, id: 1) with the new `Branding-01_b` through `Branding-12_f` files provided by the user.
+    - **Prints & Detail Tab Updates**:
+        - Replaced all images in the 'Prints' tab (id: 2) with `Prints-01` to `Prints-12`.
+        - Replaced all images in the 'Detail Page' tab (id: 3) with `Detail-01` to `Detail-12`.
+    - **SNS Tab Updates**: Replaced images in the 'SNS Advertising' tab (id: 4) with `sns-01` to `sns-12` (mixed formats: webp, jpg).
+    - **Package Tab Updates**: Replaced images in the 'Package' tab (id: 5) with `Package-01` to `Package-12` (all jpg).
+    - **Proposal Tab Updates**: Replaced images in the 'Proposal' tab (id: 6) with `Proposal-01` to `Proposal-12` (all avif).
+    - **Web Design Tab Updates**: Replaced images in the 'Web Design' tab (id: 7) with `webdesign-001.avif` to `webdesign-012.avif`.
+    - **Web/App Development Tab Updates**: Replaced images in the 'Web / App Development' tab (id: 8) with `Web_App-01` to `Web_App-12` (mixed formats: webp, avif, png).
+    - **Interior Tab Updates**: Replaced images in the 'Interior' tab (id: 9) with `Interior-01` to `Interior-12` (all avif).
+    - **Hero Section Updates**: Replaced Left column images with `hero-image-L01` to `hero-image-L06` and Right column images with `hero-image-R01` to `hero-image-R06` (mixed formats: webp, avif).
+    - **Hero Animation Adjustment**:
+    - **Hero Animation Adjustment**:
+        - **Left Column**: Starts at `-27.08%` (Staggered/Cut).
+        - **Right Column**: Starts at `0%` (Top Aligned/Full).
+        - **Layout Fix**: Changed CSS alignment from `items-center` to `items-start` on the columns container. This solves the reported issue where the Right image appeared "in the middle" despite the Keyframe being 0%, as the CSS centering was overriding the animation's top-anchor intent.
+        - **Fix Initial State**: Updated `initial` prop to (`-27.08%` / `0%`) to prevent flicker.
+        - **Removed Interaction**: Removed hover scaling effect (`hover:scale-[1.02]`) from hero images as per user request to keep the interface clean/static.
+    - **Category Tab Updates**:
+        - **Hover Interaction**: Added Zoom-In interaction to Category images (`hover:scale-[1.07]`).
+        - **Fixed Frame**: Transferred `border-radius: 9px` and `border` styles from the Image to the Image Wrapper (`overflow: hidden`). This ensures the outline and rounded corners remain fixed and do not expand/distort when the image zooms inside, fulfilling the "Fixed Outline" requirement.
+    - **Verified Mapping**: Confirmed each component corresponds to the requested CSS class/Webflow section ID.
+- **Reason**: To enhance visual quality with real portfolio images and improve the user experience with consistent animation speeds and cleaner UI.
