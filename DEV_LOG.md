@@ -127,3 +127,12 @@ o max 50% screen width (`maxWidth: 50vw`) to prevent overwhelming the screen.
         - **Hover Pause**: Temporarily halts motion when the mouse hovers over the images to allow closer inspection.
     - **Speed Optimization**: Increased the flow speed by **30%** (1.56px/frame) as per user request to create a more dynamic and energetic visual experience.
 - **Reason**: To provide a top-tier, app-like interactive experience that feels fluid, responsive, and robust under all user interactions.
+
+#### 14. Service Gallery (Gallery6) Interaction Refinement
+- **File**: `app/components/home/ServiceGallery.tsx`
+- **Change**: 
+    - Removed `whileHover={{ y: -8 }}` from the card container to stop vertical bouncing.
+    - Removed `group-hover:scale-110` from the images to disable zoom-in effect.
+    - Removed `group-hover:shadow-xl` to keep the card shadow consistent.
+    - **Click Prevention**: Changed the card container from a link (`motion.a`) to a `motion.div`.
+- **Reason**: To prevent the page from jumping to the top when clicking on service items and to fulfill the user's request for a static presentation without hover/click movements.

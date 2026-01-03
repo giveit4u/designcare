@@ -272,16 +272,23 @@ export default function Category() {
         if (!mounted || !marqueeRef.current) return;
 
         let animationFrame: number;
-        const speed = 1.56; // Increased speed by 30% (1.2 * 1.3)
+        const maxSpeed = 2.0;
+        let currentSpeed = maxSpeed;
+        const friction = 0.08; // Control how 'smooth' the stop/start is (lower = smoother)
 
         const move = () => {
-            if (!isDragging && !selectedImage && !isHovered) {
+            const isStopped = isDragging || !!selectedImage || isHovered;
+            const targetSpeed = isStopped ? 0 : maxSpeed;
+
+            // Smoothly interpolate current speed towards target speed
+            currentSpeed += (targetSpeed - currentSpeed) * friction;
+
+            if (currentSpeed > 0.001) { // Only update if moving
                 const totalWidth = marqueeRef.current?.scrollWidth || 0;
                 const singleSetWidth = totalWidth / 3;
 
-                let nextX = x.get() - speed;
+                let nextX = x.get() - currentSpeed;
 
-                // Seamless reset point
                 if (nextX <= -singleSetWidth) {
                     nextX += singleSetWidth;
                 }

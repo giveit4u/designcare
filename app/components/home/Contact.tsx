@@ -1,8 +1,36 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 export default function Contact() {
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setStatus('submitting');
+
+        const formData = new FormData(e.currentTarget);
+        try {
+            const response = await fetch("https://formspree.io/f/xrebbybd", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                setStatus('success');
+                (e.target as HTMLFormElement).reset();
+            } else {
+                setStatus('error');
+            }
+        } catch (error) {
+            setStatus('error');
+        }
+    };
+
     return (
         <section id="inquiry" className="section_contact5">
             <div className="padding-global">
@@ -52,74 +80,86 @@ export default function Contact() {
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.8, delay: 0.2 }}
                                 >
-                                    <form
-                                        id="wf-form-Contact-5-Form"
-                                        name="wf-form-Contact-5-Form"
-                                        data-name="Contact 5 Form"
-                                        method="POST"
-                                        action="https://formspree.io/f/xrebbybd"
-                                        className="contact5_form"
-                                    >
-                                        <div className="form_field-wrapper">
-                                            <label htmlFor="Contact-5-Name" className="form_field-label">이름</label>
-                                            <input
-                                                className="form_input w-input focus:border-black transition-colors"
-                                                maxLength={256}
-                                                name="Contact-5-Name"
-                                                data-name="Contact 5 Name"
-                                                placeholder="이름을 입력하세요"
-                                                type="text"
-                                                id="Contact-5-Name"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="form_field-wrapper">
-                                            <label htmlFor="Contact-5-Email" className="form_field-label">이메일</label>
-                                            <input
-                                                className="form_input w-input focus:border-black transition-colors"
-                                                maxLength={256}
-                                                name="Contact-5-Email"
-                                                data-name="Contact 5 Email"
-                                                placeholder="example@email.com"
-                                                type="email"
-                                                id="Contact-5-Email"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="form_field-wrapper">
-                                            <label htmlFor="Contact-5-Message" className="form_field-label">메시지</label>
-                                            <textarea
-                                                id="Contact-5-Message"
-                                                name="Contact-5-Message"
-                                                maxLength={5000}
-                                                data-name="Contact 5 Message"
-                                                placeholder="메시지를 입력하세요..."
-                                                required
-                                                className="form_input is-text-area w-input focus:border-black transition-colors"
-                                            ></textarea>
-                                        </div>
-                                        <div className="margin-bottom margin-xsmall">
-                                            <label id="Contact-5-Checkbox" className="w-checkbox form_checkbox flex items-center gap-2">
+                                    {status === 'success' ? (
+                                        <motion.div
+                                            className="form_message-success-wrapper"
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                        >
+                                            <div className="form_message-success">
+                                                <div className="success-text">감사합니다! 제출이 완료되었습니다!</div>
+                                            </div>
+                                        </motion.div>
+                                    ) : (
+                                        <form
+                                            id="wf-form-Contact-5-Form"
+                                            name="wf-form-Contact-5-Form"
+                                            data-name="Contact 5 Form"
+                                            onSubmit={handleSubmit}
+                                            className="contact5_form"
+                                        >
+                                            <div className="form_field-wrapper">
+                                                <label htmlFor="Contact-5-Name" className="form_field-label">이름</label>
                                                 <input
-                                                    type="checkbox"
-                                                    name="Contact-5-Checkbox"
-                                                    id="Contact 5 Checkbox"
-                                                    data-name="Contact 5 Checkbox"
+                                                    className="form_input w-input focus:border-black transition-colors"
+                                                    maxLength={256}
+                                                    name="Contact-5-Name"
+                                                    placeholder="이름을 입력하세요"
+                                                    type="text"
+                                                    id="Contact-5-Name"
                                                     required
-                                                    className="w-4 h-4"
                                                 />
-                                                <span className="form_checkbox-label text-size-small w-form-label">약관에 동의합니다</span>
-                                            </label>
-                                        </div>
-                                        <motion.input
-                                            type="submit"
-                                            data-wait="Please wait..."
-                                            className="button w-button w-full"
-                                            value="제출"
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                        />
-                                    </form>
+                                            </div>
+                                            <div className="form_field-wrapper">
+                                                <label htmlFor="Contact-5-Email" className="form_field-label">이메일</label>
+                                                <input
+                                                    className="form_input w-input focus:border-black transition-colors"
+                                                    maxLength={256}
+                                                    name="Contact-5-Email"
+                                                    placeholder="example@email.com"
+                                                    type="email"
+                                                    id="Contact-5-Email"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="form_field-wrapper">
+                                                <label htmlFor="Contact-5-Message" className="form_field-label">메시지</label>
+                                                <textarea
+                                                    id="Contact-5-Message"
+                                                    name="Contact-5-Message"
+                                                    maxLength={5000}
+                                                    placeholder="메시지를 입력하세요..."
+                                                    required
+                                                    className="form_input is-text-area w-input focus:border-black transition-colors"
+                                                ></textarea>
+                                            </div>
+                                            <div className="margin-bottom margin-xsmall">
+                                                <label id="Contact-5-Checkbox" className="w-checkbox form_checkbox flex items-center gap-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="Contact-5-Checkbox"
+                                                        id="Contact 5 Checkbox"
+                                                        required
+                                                        className="w-4 h-4"
+                                                    />
+                                                    <span className="form_checkbox-label text-size-small w-form-label">약관에 동의합니다</span>
+                                                </label>
+                                            </div>
+                                            <motion.input
+                                                type="submit"
+                                                disabled={status === 'submitting'}
+                                                className={`button w-button w-full ${status === 'submitting' ? 'opacity-50 cursor-wait' : ''}`}
+                                                value={status === 'submitting' ? "제출 중..." : "제출"}
+                                                whileHover={status === 'submitting' ? {} : { scale: 1.02 }}
+                                                whileTap={status === 'submitting' ? {} : { scale: 0.98 }}
+                                            />
+                                            {status === 'error' && (
+                                                <div className="margin-top margin-small text-color-red">
+                                                    오류가 발생했습니다. 다시 시도해주세요.
+                                                </div>
+                                            )}
+                                        </form>
+                                    )}
                                 </motion.div>
                             </div>
                         </div>

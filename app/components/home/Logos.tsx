@@ -2,22 +2,22 @@ import Image from 'next/image';
 
 export default function Logos() {
     const logos = [
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
-        "/images/logo-webflow.svg",
-        "/images/logo-webflow.svg", // Placeholder for Relume
+        "/images/01. logo-Baro.png",
+        "/images/02. logo-ixcon.png",
+        "/images/03. logo-eliot.png",
+        "/images/04. logo-liroom.png",
+        "/images/05. logo-vivliv.png",
+        "/images/06. logo-underpin.png",
+        "/images/07. logo-rightnow.png",
+        "/images/08. logo-j&j.png",
+        "/images/09. logo-blue origin.png",
+        "/images/10. logo-want.png",
+        "/images/11. logo-fairpass.png",
+        "/images/12. logo-zikcompany.svg",
+        "/images/13. logo-my weight.png",
+        "/images/14. logo-brosfit.png",
+        "/images/15. logo-chainG.png",
+        "/images/16. logo-zikpay.png",
     ];
 
     return (
@@ -35,17 +35,32 @@ export default function Logos() {
                     </div>
                 </div>
                 <div className="logo3_component">
-                    {/* Added inline styles for flex gap as fallback, and removed opacity/grayscale for better visibility */}
-                    <div className="animate-marquee" style={{ display: 'flex', gap: '2rem', padding: '1rem 0' }}>
+                    {/* Seamless loop using padding-right instead of gap for perfect calculation at -50% */}
+                    <div className="animate-marquee" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '2.5rem 0'
+                    }}>
                         {[...logos, ...logos].map((src, index) => (
-                            <div key={index} className="logo3_wrapper" style={{ flexShrink: 0 }}>
+                            <div key={index} className="logo3_wrapper" style={{
+                                flexShrink: 0,
+                                paddingRight: '4rem', // 2x spacing (prev was 2rem)
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
                                 <Image
                                     src={src}
                                     alt="Partner Logo"
                                     width={150}
                                     height={50}
                                     className="logo3_logo"
-                                    style={{ objectFit: 'contain' }}
+                                    style={{
+                                        objectFit: 'contain',
+                                        width: 'auto',
+                                        height: '40px',
+                                        maxWidth: '140px'
+                                    }}
                                 />
                             </div>
                         ))}

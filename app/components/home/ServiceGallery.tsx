@@ -34,54 +34,46 @@ export default function ServiceGallery() {
                             <div className="w-layout-grid gallery6_grid-list gap-8">
                                 <div className="w-layout-grid gallery6_row gap-6">
                                     {settings.slice(0, 4).map((item, index) => (
-                                        <motion.a
+                                        <motion.div
                                             key={index}
-                                            href="#"
-                                            className="gallery6_lightbox-link w-inline-block w-lightbox group"
-                                            whileHover={{ y: -8 }}
+                                            className="gallery6_image-wrapper group"
                                             transition={{ duration: 0.3, ease: "easeOut" }}
                                         >
-                                            <div className="gallery6_image-wrapper">
-                                                <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm group-hover:shadow-xl transition-shadow duration-300">
-                                                    <Image
-                                                        src={item.img}
-                                                        alt={item.title}
-                                                        fill
-                                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/5 p-4 flex flex-col justify-start">
-                                                        <h4 className="heading-style-h4 box bg-white/80 self-start px-3 py-1 rounded-[4px] backdrop-blur-sm">{item.title}</h4>
-                                                    </div>
+                                            <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm transition-shadow duration-300">
+                                                <Image
+                                                    src={item.img}
+                                                    alt={item.title}
+                                                    fill
+                                                    className="object-cover transition-transform duration-500"
+                                                />
+                                                <div className="absolute inset-0 bg-black/5 p-4 flex flex-col justify-start">
+                                                    <h4 className="heading-style-h4 box bg-white/80 self-start px-3 py-1 rounded-[4px] backdrop-blur-sm">{item.title}</h4>
                                                 </div>
-                                                <p className="paragraph text-[#4b5563] text-sm leading-relaxed">{item.subtitle}</p>
                                             </div>
-                                        </motion.a>
+                                            <p className="paragraph text-[#4b5563] text-sm leading-relaxed">{item.subtitle}</p>
+                                        </motion.div>
                                     ))}
                                 </div>
                                 <div className="w-layout-grid gallery6_row gap-6 mt-8">
                                     {settings.slice(4, 8).map((item, index) => (
-                                        <motion.a
+                                        <motion.div
                                             key={index + 4}
-                                            href="#"
-                                            className="gallery6_lightbox-link w-inline-block w-lightbox group"
-                                            whileHover={{ y: -8 }}
+                                            className="gallery6_image-wrapper group"
                                             transition={{ duration: 0.3, ease: "easeOut" }}
                                         >
-                                            <div className="gallery6_image-wrapper">
-                                                <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm group-hover:shadow-xl transition-shadow duration-300">
-                                                    <Image
-                                                        src={item.img}
-                                                        alt={item.title}
-                                                        fill
-                                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/5 p-4 flex flex-col justify-start">
-                                                        <h4 className="heading-style-h4 box bg-white/80 self-start px-3 py-1 rounded-[4px] backdrop-blur-sm">{item.title}</h4>
-                                                    </div>
+                                            <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm transition-shadow duration-300">
+                                                <Image
+                                                    src={item.img}
+                                                    alt={item.title}
+                                                    fill
+                                                    className="object-cover transition-transform duration-500"
+                                                />
+                                                <div className="absolute inset-0 bg-black/5 p-4 flex flex-col justify-start">
+                                                    <h4 className="heading-style-h4 box bg-white/80 self-start px-3 py-1 rounded-[4px] backdrop-blur-sm">{item.title}</h4>
                                                 </div>
-                                                <p className="paragraph text-[#4b5563] text-sm leading-relaxed">{item.subtitle}</p>
                                             </div>
-                                        </motion.a>
+                                            <p className="paragraph text-[#4b5563] text-sm leading-relaxed">{item.subtitle}</p>
+                                        </motion.div>
                                     ))}
                                 </div>
                             </div>
