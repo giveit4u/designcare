@@ -60,5 +60,70 @@
     - **Category Tab Updates**:
         - **Hover Interaction**: Added Zoom-In interaction to Category images (`hover:scale-[1.07]`).
         - **Fixed Frame**: Transferred `border-radius: 9px` and `border` styles from the Image to the Image Wrapper (`overflow: hidden`). This ensures the outline and rounded corners remain fixed and do not expand/distort when the image zooms inside, fulfilling the "Fixed Outline" requirement.
+    - **Typography Updates**:
+        - **Headings**: Updated font weights as requested:
+            - **H1, H2, H3**: Set to `font-weight: 800` (ExtraBold) for stronger emphasis.
+            - **H4, H5, H6**: Maintained at `font-weight: 700` (Bold).
+    - **Category Tab Interaction**:
+        - **Tab Button Hover**: Modified hover effect for inactive tab buttons. Removed the background darkening and replaced it with a **15% darker outline** (`box-shadow: inset 0 0 0 1px #c6c6c6`) using an inset shadow to prevent layout shifts. This creates a cleaner, more subtle interactive state as requested.
+        - **Image Viewer Modal Expansion**: Extended the modal viewer functionality to the **'Web Design' tab (ID: 7)**.
+            - **Click Interaction**: Clicking a web design image now opens the modal (similar to the Branding tab).
+            - **Detail View Refinement**: 
+                - **Scrollable Content**: Main image area now supports vertical scrolling (`overflow-y-auto`), allowing users to see full-length landing pages or long vertical designs in detail.
+                - **Sidebar UI**: 
+                    - 'Select View' heading font size set to `1rem`.
+                    - Sidebar width increased to **`225px`** (+25% from previous) for better thumbnail visibility.
+                    - Arranged in a **vertical list** for cleaner navigation.
+                - **Layout Consistency (Fixed Frame)**: Reconstructed the modal layout so the **gray margin (24px) is fixed and non-scrolling**. The image now scrolls *inside* this fixed frame, ensuring it never touches the edges of the modal window at any point during scroll.
+                - **Interaction Fix**: Successfully implemented **Background Scroll Lock** using `useEffect` on `document.body.style.overflow`. This prevents the main page from scrolling when the modal is active.
+            - **Image Protection System (Anti-Copy)**:
+                - **Server-Side Watermarking**: Implemented a Next.js API route (`/api/watermark`) using the **Sharp** library.
+                - **Dynamic Processing**: All portfolio images are now routed through this API, which automatically embeds a subtle, 30-degree rotated "DESIGNCARE" text watermark into the image pixels.
+                - **Screenshot & Save Defense**: Since the watermark is part of the image file itself, it persists even if the user takes a screenshot or manages to save the file.
+                - **UI/UX Deterrents**: Added `onContextMenu` prevention (disables right-click) and `draggable={false}` to all protected images to further discourage casual theft.
+            - **UI Feedback**: Enabled the `cursor-pointer` for Web Design tab image wrappers.
+        - **Image Viewer Modal (v2 Refinement)**:
+            - **Tab Sizing Fix**: Corrected the 'Web Design' tab image dimensions from vertical `20rem x 32rem` to horizontal `26rem x 19.5rem` to ensure a consistent marquee flow with other categories.
+            - **Stabilized Watermarking**: Refactored the `/api/watermark` route to use the standard `Response` constructor, resolving the "Screen Error" caused by binary data handling in Next.js App Router.
+            - **Subtle Protection**: Adjusted watermark opacity to `0.05` for a premium, non-intrusive look that still provides screenshot protection.
+o max 50% screen width (`maxWidth: 50vw`) to prevent overwhelming the screen.
+                - **Sidebar Selector**: Right side (`w-[320px]`), allowing users to "upload" (select) and switch between multiple detail views of the same project.
+            - **Z-Index Fix (Portal)**: Modified implementation to use `React.createPortal` rendering to `document.body`. This definitively resolves stacking context issues, ensuring the Modal appears **above all content**, including the Navigation Bar.
+            - **Test Data**: Applied multiple detail images to the first Branding item (`Branding-01`) for demonstration.
     - **Verified Mapping**: Confirmed each component corresponds to the requested CSS class/Webflow section ID.
-- **Reason**: To enhance visual quality with real portfolio images and improve the user experience with consistent animation speeds and cleaner UI.
+#### 11. Watermark Logo & Modal Selection Refinement
+- **Watermarking System (v3)**:
+    - **Logo Integration**: Replaced the plain text "DESIGNCARE" watermark with the official `designcare-logo.svg`. 
+    - **Orientation**: Rotated the logo to **-20 degrees** (counter-clockwise) and set opacity to `0.12` for a subtle, professional look.
+    - **Cache Management**: Incremented version to `v=5` across all image components to ensure the new logo watermark propagates immediately.
+- **Universal Image Viewer Modal**:
+    - **Global Access**: Removed the category restriction; the modal now opens for images in **all portfolio tabs**.
+    - **"Select View" Sidebar Refinement**:
+        - **Fixed Header**: The "Select View" text and close icon are now **fixed at the top** of the sidebar, staying visible while thumbnails scroll underneath.
+        - **Thumbnail Limit**: Increased the maximum number of visible thumbnails to **5**.
+        - **Clean UI**: Completely hid the scrollbar in the sidebar using a `.no-scrollbar` utility (with `!important` flags) while maintaining scroll functionality.
+- **Image Quality & Border Consistency**:
+    - **Premium Overlay Borders**: To solve "blurry" or "inconsistent" borders during hover/scale, moved the `1px` border to an **absolute overlay** (`z-10`) on top of the image. This ensures the border remains razor-sharp regardless of the image's internal scaling.
+    - **Anti-Aliasing**: Applied `WebkitMaskImage` and `isolation: isolate` to prevent "shimmering" or jagged edges on rounded corners during animations.
+    - **Color Standardization**: Consolidated on `#e5e5e5` for non-hover borders and `solid black` (2px) for active states.
+- **Reason**: To deliver a truly premium and consistent portfolio browsing experience, ensuring the brand logo is correctly represented and the UI feels stable and high-end.
+
+#### 12. Pricing Section & Navbar Refinements
+- **Pricing Section Fixes**:
+    - **Badge Clipping Resolution**: Resolved an issue where the "Most Popular" badge was being cut off at the top of the cards. This was fixed by increasing the top padding of the card and ensuring `overflow: visible` is applied to all parent containers (tab pane, flex layout).
+    - **Hover State Integrity**: Fixed border clipping during hover animations by relaxing overflow constraints and ensuring sufficient spacing between cards.
+- **Navbar Enhancements**:
+    - **Active Section Highlighting**: Implemented an intersection observer that dynamically changes the navigation link color to brand green (`#068A32`) when the corresponding section is in view.
+    - **UI Cleanup**: Removed the bottom border (`border-b`) from the navbar for a cleaner, more seamless transition into the page content.
+
+#### 13. Portfolio (Category) Interaction & Animation Engine Upgrade
+- **Innovation**: Replaced the CSS/Framer-based marquee with a custom **High-Performance RAF (requestAnimationFrame) Engine**.
+- **Features**:
+    - **Seamless Infinite Loop**: Implemented instant x-coordinate normalization that eliminates the "rewind" or "jump" glitch when reaching the end of the image set.
+    - **Drag & Swipe**: Added interactive drag functionality. Users can now click and drag (PC) or swipe (Mobile) to manually explore the portfolio.
+    - **Smart Animation Control**:
+        - **Pause on Modal**: Animation pauses exactly where it is when an image modal is opened.
+        - **Resume on Close**: Smoothly resumes from the same position upon closing.
+        - **Hover Pause**: Temporarily halts motion when the mouse hovers over the images to allow closer inspection.
+    - **Speed Optimization**: Increased the flow speed by **30%** (1.56px/frame) as per user request to create a more dynamic and energetic visual experience.
+- **Reason**: To provide a top-tier, app-like interactive experience that feels fluid, responsive, and robust under all user interactions.

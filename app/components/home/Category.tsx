@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation, useMotionValue } from 'framer-motion';
 
 // Tab Data Structure
 type Tab = {
@@ -10,11 +11,10 @@ type Tab = {
     label: string;
     subtitle: string;
     sizeClass?: string;
-    // Pre-calculated dimensions ensuring pixel-perfect match with Webflow CSS rules
     dimensions: { width: string; height: string };
-    objectPosition?: string; // Add optional objectPosition
-    paddingTop?: string; // Add optional paddingTop
-    images: { src: string; alt: string; width?: number; height?: number }[];
+    objectPosition?: string;
+    paddingTop?: string;
+    images: { src: string; alt: string; width?: number; height?: number; detailImages?: string[] }[];
 };
 
 const TABS: Tab[] = [
@@ -22,10 +22,20 @@ const TABS: Tab[] = [
         id: 1,
         label: '브랜딩',
         subtitle: 'CI, BI / 로고 / 가이드라인',
-        sizeClass: '', // Default: width 26rem, padding-top 75% -> 19.5rem height
-        dimensions: { width: '26rem', height: '19.5rem' },
+        sizeClass: '',
+        dimensions: { width: '416px', height: '312px' },
+        paddingTop: '0',
         images: [
-            { src: '/images/Branding-01_b.webp', alt: 'branding & Logo Design' },
+            {
+                src: '/images/Branding-01_b.webp',
+                alt: 'branding & Logo Design',
+                detailImages: [
+                    '/images/Branding-01_b.webp',
+                    '/images/Branding-02_k.avif',
+                    '/images/Branding-03_e.avif',
+                    '/images/Branding-04_s.avif'
+                ]
+            },
             { src: '/images/Branding-02_k.avif', alt: 'branding & Logo Design' },
             { src: '/images/Branding-03_e.avif', alt: 'branding & Logo Design' },
             { src: '/images/Branding-04_s.avif', alt: 'branding & Logo Design' },
@@ -44,7 +54,8 @@ const TABS: Tab[] = [
         label: '인쇄물',
         subtitle: '포스터 / 명함 / 전단지 / 책자 / 리플렛 / X배너 / 플랜카드 / 사인물',
         sizeClass: '_20x32',
-        dimensions: { width: '20rem', height: '32rem' },
+        dimensions: { width: '320px', height: '512px' },
+        paddingTop: '0',
         images: [
             { src: '/images/Prints-01.jpg', alt: 'print design' },
             { src: '/images/Prints-02.jpg', alt: 'print design' },
@@ -65,7 +76,8 @@ const TABS: Tab[] = [
         label: '상세페이지',
         subtitle: '스마트스토어 / 오픈마켓 / 와디즈 / 텀블벅 / 카탈로그',
         sizeClass: '_20x32',
-        dimensions: { width: '20rem', height: '32rem' },
+        dimensions: { width: '320px', height: '512px' },
+        paddingTop: '0',
         images: [
             { src: '/images/Detail-01.webp', alt: 'detail page' },
             { src: '/images/Detail-02.avif', alt: 'detail page' },
@@ -86,7 +98,8 @@ const TABS: Tab[] = [
         label: 'SNS 광고',
         subtitle: '인스타그램 / 페이스북 / 블로그 / 카드뉴스 / 썸네일',
         sizeClass: '_26x26',
-        dimensions: { width: '26rem', height: '26rem' },
+        dimensions: { width: '416px', height: '416px' },
+        paddingTop: '0',
         images: [
             { src: '/images/sns-01.webp', alt: 'sns ad' },
             { src: '/images/sns-02.webp', alt: 'sns ad' },
@@ -107,7 +120,8 @@ const TABS: Tab[] = [
         label: '패키지',
         subtitle: '단상자 / 싸바리박스 / 파우치 / 라벨 / 쇼핑백',
         sizeClass: '_26x26',
-        dimensions: { width: '26rem', height: '26rem' },
+        dimensions: { width: '416px', height: '416px' },
+        paddingTop: '0',
         images: [
             { src: '/images/Package-01.jpg', alt: 'package design' },
             { src: '/images/Package-02.jpg', alt: 'package design' },
@@ -128,7 +142,8 @@ const TABS: Tab[] = [
         label: '제안서',
         subtitle: '회사소개서 / 사업계획서 / 제안서 / IR자료',
         sizeClass: '_34x16',
-        dimensions: { width: '34rem', height: '19.7rem' },
+        dimensions: { width: '544px', height: '315px' },
+        paddingTop: '0',
         images: [
             { src: '/images/Proposal-01.avif', alt: 'proposal' },
             { src: '/images/Proposal-02.avif', alt: 'proposal' },
@@ -149,10 +164,19 @@ const TABS: Tab[] = [
         label: '웹디자인',
         subtitle: '자사몰 / 랜딩페이지 / 프로모션 / 이벤트',
         sizeClass: '_20x32',
-        dimensions: { width: '20rem', height: '32rem' },
-        objectPosition: '50% 0%', // Set object position to top center
+        dimensions: { width: '320px', height: '512px' },
+        paddingTop: '0',
+        objectPosition: '50% 0%',
         images: [
-            { src: '/images/webdesign-001.avif', alt: 'web design portfolio 1' },
+            {
+                src: '/images/webdesign-001.avif',
+                alt: 'web design portfolio 1',
+                detailImages: [
+                    '/images/webdesign-001.avif',
+                    '/images/webdesign-002.avif',
+                    '/images/webdesign-003.avif'
+                ]
+            },
             { src: '/images/webdesign-002.avif', alt: 'web design portfolio 2' },
             { src: '/images/webdesign-003.avif', alt: 'web design portfolio 3' },
             { src: '/images/webdesign-004.avif', alt: 'web design portfolio 4' },
@@ -171,13 +195,14 @@ const TABS: Tab[] = [
         label: '웹 / 앱개발',
         subtitle: '하이브리드앱 / 네이티브앱 / 웹사이트 / 관리자페이지',
         sizeClass: '_32x20',
-        dimensions: { width: '32rem', height: '18.24rem' }, // 32rem * 0.57 (padding-top) = 18.24rem
-        objectPosition: '50% 0%', // Also likely useful for apps
+        dimensions: { width: '512px', height: '292px' },
+        paddingTop: '0',
+        objectPosition: '50% 0%',
         images: [
             { src: '/images/Web_App-01.webp', alt: 'app design portfolio 1' },
             { src: '/images/Web_App-02.webp', alt: 'app design portfolio 2' },
             { src: '/images/Web_App-03.avif', alt: 'app design portfolio 3' },
-            { src: '/images/Web_App-04.avif', alt: 'app design portfolio 4' },
+            { src: '/images/Web_App-04.webp', alt: 'app design portfolio 4' },
             { src: '/images/Web_App-05.png', alt: 'app design portfolio 5' },
             { src: '/images/Web_App-06.avif', alt: 'app design portfolio 6' },
             { src: '/images/Web_App-07.png', alt: 'app design portfolio 7' },
@@ -192,8 +217,9 @@ const TABS: Tab[] = [
         id: 9,
         label: '인테리어',
         subtitle: '주거공간 / 상업공간 / 사무공간 / 전시공간',
-        sizeClass: '', // Same as Branding
-        dimensions: { width: '26rem', height: '19.5rem' },
+        sizeClass: '',
+        dimensions: { width: '416px', height: '312px' },
+        paddingTop: '0',
         images: [
             { src: '/images/Interior-01.avif', alt: 'interior design' },
             { src: '/images/Interior-02.avif', alt: 'interior design' },
@@ -213,15 +239,72 @@ const TABS: Tab[] = [
 
 export default function Category() {
     const [activeTabId, setActiveTabId] = useState<number>(1);
+    const [selectedImage, setSelectedImage] = useState<any>(null);
+    const [currentDetailIndex, setCurrentDetailIndex] = useState(0);
+    const [mounted, setMounted] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+
+    const controls = useAnimation();
+    const x = useMotionValue(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const marqueeRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (selectedImage) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [selectedImage]);
 
     const activeTab = TABS.find(tab => tab.id === activeTabId) || TABS[0];
 
-    // Dynamic duration calculation: 40s for ~12 images -> ~3.5s per image
-    // This ensures consistent visual speed regardless of image count
-    const marqueeDuration = activeTab.images.length * 3.5;
+    // Ultra-reliable infinite marquee logic
+    useEffect(() => {
+        if (!mounted || !marqueeRef.current) return;
+
+        let animationFrame: number;
+        const speed = 1.56; // Increased speed by 30% (1.2 * 1.3)
+
+        const move = () => {
+            if (!isDragging && !selectedImage && !isHovered) {
+                const totalWidth = marqueeRef.current?.scrollWidth || 0;
+                const singleSetWidth = totalWidth / 3;
+
+                let nextX = x.get() - speed;
+
+                // Seamless reset point
+                if (nextX <= -singleSetWidth) {
+                    nextX += singleSetWidth;
+                }
+
+                x.set(nextX);
+            }
+            animationFrame = requestAnimationFrame(move);
+        };
+
+        animationFrame = requestAnimationFrame(move);
+
+        return () => cancelAnimationFrame(animationFrame);
+    }, [mounted, isDragging, !!selectedImage, isHovered, activeTabId]);
+
+    const handleImageClick = (img: any) => {
+        if (!isDragging) {
+            setSelectedImage(img);
+            setCurrentDetailIndex(0);
+        }
+    };
 
     return (
-        <section id="service" className="section_layout504">
+        <section id="portfolio" className="section_layout504">
             <div className="padding-global">
                 <div className="container-large">
                     <div className="padding-section-large single-padding">
@@ -247,7 +330,10 @@ export default function Category() {
                                         <a
                                             key={tab.id}
                                             className={`layout504_tab-link w-inline-block w-tab-link ${activeTabId === tab.id ? 'w--current' : ''}`}
-                                            onClick={() => setActiveTabId(tab.id)}
+                                            onClick={() => {
+                                                setActiveTabId(tab.id);
+                                                x.set(0);
+                                            }}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <div>{tab.label}</div>
@@ -262,57 +348,73 @@ export default function Category() {
                                         </p>
                                         <div className="layout504_content-bottom">
                                             <div className="layout504_images-layout">
-                                                {/* Marquee Wrapper: Replaces 'layout504_image-list-top' grid with Flex for animation */}
                                                 <div
+                                                    ref={containerRef}
                                                     className="layout504_image-list-top"
+                                                    onMouseEnter={() => setIsHovered(true)}
+                                                    onMouseLeave={() => setIsHovered(false)}
                                                     style={{
                                                         overflow: 'hidden',
                                                         width: '100%',
+                                                        cursor: isDragging ? 'grabbing' : 'grab',
+                                                        touchAction: 'none'
                                                     }}
                                                 >
                                                     <motion.div
+                                                        ref={marqueeRef}
+                                                        drag="x"
+                                                        onDragStart={() => setIsDragging(true)}
+                                                        onDragEnd={() => {
+                                                            setTimeout(() => setIsDragging(false), 50);
+                                                            // Normalize x after drag to stay within the first set
+                                                            const totalWidth = marqueeRef.current?.scrollWidth || 0;
+                                                            const singleSetWidth = totalWidth / 3;
+                                                            let finalX = x.get();
+                                                            while (finalX > 0) finalX -= singleSetWidth;
+                                                            while (finalX <= -singleSetWidth) finalX += singleSetWidth;
+                                                            x.set(finalX);
+                                                        }}
                                                         style={{
                                                             display: 'flex',
                                                             width: 'max-content',
+                                                            x
                                                         }}
-                                                        animate={{ x: ["0%", "-50%"] }}
-                                                        transition={{
-                                                            duration: marqueeDuration,
-                                                            ease: "linear",
-                                                            repeat: Infinity,
-                                                        }}
-                                                        key={activeTab.id} // Reset animation on tab change
+                                                        key={activeTab.id}
                                                     >
-                                                        {/* Duplicate list for smooth seamless loop - flattened for perfect timing */}
-                                                        {[...activeTab.images, ...activeTab.images].map((img, index) => (
+                                                        {[...activeTab.images, ...activeTab.images, ...activeTab.images].map((img, index) => (
                                                             <div
                                                                 key={`${activeTab.id}-${index}`}
-                                                                className={`layout504_image-wrapper ${activeTab.sizeClass || ''}`}
+                                                                onClick={() => handleImageClick(img)}
+                                                                onContextMenu={(e) => e.preventDefault()}
+                                                                className={`layout504_image-wrapper ${activeTab.sizeClass || ''} cursor-pointer group`}
                                                                 style={{
                                                                     flexShrink: 0,
                                                                     position: 'relative',
                                                                     width: activeTab.dimensions.width,
                                                                     height: activeTab.dimensions.height,
-                                                                    paddingTop: '0',
+                                                                    paddingTop: 0,
                                                                     marginRight: '1rem',
+                                                                    borderRadius: '12px',
                                                                     overflow: 'hidden',
-                                                                    borderRadius: '9px',
-                                                                    border: '1px solid var(--base-color-neutral--neutral-lighter-200)'
+                                                                    WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                                                                    pointerEvents: isDragging ? 'none' : 'auto',
+                                                                    userSelect: 'none'
                                                                 }}
                                                             >
                                                                 <Image
-                                                                    src={img.src}
+                                                                    src={`/api/watermark?url=${img.src}&v=5`}
                                                                     alt={img.alt}
                                                                     fill
-                                                                    sizes="(max-width: 479px) 100vw, (max-width: 767px) 26rem, 26rem"
-                                                                    className="layout504_image transition-transform duration-500 hover:scale-[1.07]"
+                                                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                                                    className="layout504_image transition-transform duration-500 group-hover:scale-[1.07] select-none"
                                                                     style={{
                                                                         objectFit: 'cover',
-                                                                        objectPosition: activeTab.objectPosition || 'center',
-                                                                        borderRadius: '0',
-                                                                        border: 'none'
+                                                                        objectPosition: activeTab.objectPosition || 'center'
                                                                     }}
+                                                                    draggable={false}
+                                                                    unoptimized
                                                                 />
+                                                                <div className="absolute inset-0 pointer-events-none rounded-[12px] border border-[#ccc] z-10" />
                                                             </div>
                                                         ))}
                                                     </motion.div>
@@ -326,6 +428,75 @@ export default function Category() {
                     </div>
                 </div>
             </div>
+            {mounted && createPortal(
+                <AnimatePresence>
+                    {selectedImage && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[9999999] flex items-center justify-center bg-black/90 p-4"
+                            onClick={() => setSelectedImage(null)}
+                        >
+                            <div
+                                className="bg-white rounded-lg overflow-hidden flex flex-col md:flex-row max-w-[80vw] max-h-[80vh] shadow-2xl"
+                                style={{ width: 'auto' }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="relative flex-1 bg-gray-100 p-6 flex flex-col" style={{ minWidth: '36vw', maxWidth: '45vw', height: '80vh' }}>
+                                    <div className="flex-1 overflow-y-auto custom-scrollbar">
+                                        <div className="w-full shadow-xl">
+                                            <img
+                                                src={`/api/watermark?url=${(selectedImage.detailImages && selectedImage.detailImages.length > 0)
+                                                    ? selectedImage.detailImages[currentDetailIndex]
+                                                    : selectedImage.src}&v=5`}
+                                                alt={selectedImage.alt}
+                                                className="w-full h-auto block select-none"
+                                                onContextMenu={(e) => e.preventDefault()}
+                                                draggable={false}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="w-[225px] bg-white flex flex-col border-l border-gray-200">
+                                    <div className="p-6 pb-4 flex justify-between items-center bg-white z-10 border-b border-gray-50">
+                                        <h3 className="font-bold" style={{ fontSize: '1rem' }}>Select View</h3>
+                                        <button onClick={() => setSelectedImage(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-900">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar px-6 pt-4 pb-6">
+                                        <div className="flex flex-col gap-3">
+                                            {(selectedImage.detailImages || [selectedImage.src]).slice(0, 5).map((src: string, idx: number) => (
+                                                <div
+                                                    key={idx}
+                                                    onClick={() => setCurrentDetailIndex(idx)}
+                                                    className={`relative aspect-square cursor-pointer rounded-md overflow-hidden transition-all`}
+                                                    onContextMenu={(e) => e.preventDefault()}
+                                                >
+                                                    <Image
+                                                        src={`/api/watermark?url=${src}&v=5`}
+                                                        alt="thumbnail"
+                                                        fill
+                                                        style={{ objectFit: 'cover' }}
+                                                        draggable={false}
+                                                        unoptimized
+                                                    />
+                                                    <div className={`absolute inset-0 pointer-events-none rounded-md border-2 transition-colors z-10 ${currentDetailIndex === idx ? 'border-black' : 'border-[#ccc]'}`} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </section>
     );
 }
