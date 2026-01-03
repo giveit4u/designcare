@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 type PricingPlan = {
     name: string;
@@ -15,7 +15,7 @@ type PricingPlan = {
 export default function Pricing() {
     const [activeTab, setActiveTab] = useState('Tab 1'); // Tab 1 = 1개월, Tab 2 = 3개월
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -23,7 +23,7 @@ export default function Pricing() {
         }
     };
 
-    const cardVariants = {
+    const cardVariants: Variants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 1,
@@ -32,7 +32,7 @@ export default function Pricing() {
         }
     };
 
-    const tabContentVariants = {
+    const tabContentVariants: Variants = {
         initial: { opacity: 0, x: 20 },
         animate: { opacity: 1, x: 0 },
         exit: { opacity: 0, x: -20 },
@@ -177,7 +177,7 @@ export default function Pricing() {
                                                                 textTransform: 'uppercase',
                                                                 zIndex: 10
                                                             }}>
-                                                                Most Popular
+                                                                가장 인기있는
                                                             </div>
                                                         )}
                                                         <div className="margin-bottom margin-tiny">

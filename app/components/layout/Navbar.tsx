@@ -6,15 +6,40 @@ import Image from 'next/image';
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 991);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const closeMenu = () => {
+        setIsMenuOpen(false);
+    };
+
+    useEffect(() => {
+        if (isMenuOpen && isMobile) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMenuOpen, isMobile]);
+
     useEffect(() => {
         const observerOptions = {
             root: null,
-            rootMargin: '-30% 0px -70% 0px', // Detect when section enters the upper part of the viewport
+            rootMargin: '-30% 0px -70% 0px',
             threshold: 0
         };
 
@@ -55,69 +80,206 @@ export default function Navbar() {
     ];
 
     return (
-        <div data-collapse="small" data-animation="default" data-duration="400" role="banner" className="navbar1_component w-nav fixed top-0 w-full z-[1000] bg-white">
-            <div className="navbar13_container">
-                <Link href="#Top" className="navbar13_logo-link w-nav-brand">
+        <div data-collapse="small" data-animation="default" data-duration="400" role="banner"
+            className="navbar1_component w-nav fixed top-0 w-full z-[1000]"
+            style={{
+                backgroundColor: 'transparent',
+                marginTop: isMobile ? '10px' : '1.5rem',
+                paddingLeft: isMobile ? '20px' : '5%',
+                paddingRight: isMobile ? '20px' : '5%',
+                display: 'flex',
+                alignItems: 'center',
+                pointerEvents: isMobile ? 'auto' : 'none',
+                zIndex: 1002 // Ensure header stays on top
+            }}>
+            <div className="navbar13_container" style={{
+                maxWidth: isMobile ? '100%' : '1200px',
+                width: isMobile ? '100%' : 'auto',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingLeft: isMobile ? '6px' : '0.5rem',
+                paddingRight: isMobile ? '6px' : '0.5rem',
+                height: isMobile ? '64px' : 'auto',
+                minHeight: isMobile ? '64px' : '4.5rem',
+                borderRadius: '50px',
+                backgroundColor: 'white',
+                boxShadow: '4px 4px 20px rgba(0,0,0,0.1)',
+                position: 'relative',
+                pointerEvents: 'auto',
+                zIndex: 1003
+            }}>
+                <Link href="#Top" className="navbar13_logo-link w-nav-brand" onClick={closeMenu}>
                     <Image
                         src="/images/icon-dc-256-1.png"
                         alt="Designcare Logo"
                         width={210}
                         height={56}
                         className="navbar13_logo"
-                        style={{ height: '56px', width: 'auto' }}
+                        style={{
+                            height: isMobile ? '52px' : '3.5rem',
+                            width: 'auto',
+                            borderRadius: '100px'
+                        }}
                         priority
                     />
                 </Link>
-                <nav role="navigation" className={`navbar13_menu w-nav-menu ${isMenuOpen ? 'w--nav-menu-open' : ''}`} style={{
-                    display: isMenuOpen ? 'block' : undefined
-                }}>
-                    <div className="navbar13_menu-link-wrapper">
+
+                <nav role="navigation"
+                    className={`navbar13_menu w-nav-menu ${isMenuOpen && isMobile ? 'w--nav-menu-open' : ''}`}
+                    style={isMobile ? {
+                        display: isMenuOpen ? 'flex' : 'none',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        marginTop: '0',
+                        backgroundColor: '#222222',
+                        paddingLeft: '7.5%',
+                        paddingRight: '7.5%',
+                        paddingTop: '50px',
+                        paddingBottom: '30px',
+                        width: '100vw',
+                        position: 'fixed',
+                        top: '84px', // 10px margin + 64px header + 10px gap
+                        left: '0',
+                        height: 'calc(100vh - 84px)',
+                        borderTopLeftRadius: '24px',
+                        borderTopRightRadius: '24px',
+                        overflow: 'hidden',
+                        zIndex: 1000
+                    } : {
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        gap: '0.5rem',
+                        position: 'static',
+                        backgroundColor: 'transparent',
+                        height: 'auto',
+                        width: 'auto',
+                        padding: '0 1rem'
+                    }}>
+                    <div className="navbar13_menu-link-wrapper" style={{
+                        display: 'flex',
+                        flexDirection: isMobile ? 'column' : 'row',
+                        width: isMobile ? '100%' : 'auto',
+                        flex: isMobile ? '0 0 auto' : 'none',
+                        gap: isMobile ? '0' : '0'
+                    }}>
                         {navLinks.map((link) => (
-                            <Link
+                            <a
                                 key={link.href}
                                 href={link.href}
-                                className={`navbar13_link w-nav-link transition-colors duration-300`}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    const targetId = link.href.replace('#', '');
+                                    const element = document.getElementById(targetId);
+                                    if (element) {
+                                        const offset = 80;
+                                        const bodyRect = document.body.getBoundingClientRect().top;
+                                        const elementRect = element.getBoundingClientRect().top;
+                                        const elementPosition = elementRect - bodyRect;
+                                        const offsetPosition = elementPosition - offset;
+
+                                        window.scrollTo({
+                                            top: offsetPosition,
+                                            behavior: 'smooth'
+                                        });
+                                    }
+                                    if (isMobile) closeMenu();
+                                }}
+                                className="navbar13_link w-nav-link"
                                 style={{
                                     fontSize: '1rem',
-                                    fontWeight: '600',
-                                    color: activeSection === link.id ? '#068A32' : undefined
+                                    fontWeight: '500',
+                                    color: activeSection === link.id ? '#068A32' : (isMobile ? '#d1d1d1' : '#333'),
+                                    padding: isMobile ? '1.375rem 0' : '0.5rem 1rem',
+                                    borderBottom: isMobile ? '1px solid #333333' : 'none',
+                                    display: 'block',
+                                    width: isMobile ? '100%' : 'auto',
+                                    transition: 'color 0.3s ease'
                                 }}
                             >
                                 {link.label}
-                            </Link>
+                            </a>
                         ))}
+                    </div>
 
-                        <div data-delay="200" data-hover="true" className="navbar13_menu-dropdown w-dropdown group">
-                            <div className="navbar13_dropdown-toggle w-dropdown-toggle">
-                                <div style={{ fontSize: '1rem', fontWeight: '600' }}>프로젝트</div>
-                                <div className="dropdown-chevron w-embed">
-                                    <svg width="100%" height="100%" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M2.55806 6.29544C2.46043 6.19781 2.46043 6.03952 2.55806 5.94189L3.44195 5.058C3.53958 4.96037 3.69787 4.96037 3.7955 5.058L8.00001 9.26251L12.2045 5.058C12.3021 4.96037 12.4604 4.96037 12.5581 5.058L13.4419 5.94189C13.5396 6.03952 13.5396 6.19781 13.4419 6.29544L8.17678 11.5606C8.07915 11.6582 7.92086 11.6582 7.82323 11.5606L2.55806 6.29544Z" fill="currentColor"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <nav className="navbar13_dropdown-list w-dropdown-list group-hover:block">
-                                <Link href="#" className="navbar13_dropdown-link w-dropdown-link" style={{ fontSize: '0.9rem' }}>Logo & Branding</Link>
-                                <Link href="#" className="navbar13_dropdown-link w-dropdown-link" style={{ fontSize: '0.9rem' }}>Web Design</Link>
-                                <Link href="#" className="navbar13_dropdown-link w-dropdown-link" style={{ fontSize: '0.9rem' }}>App Development</Link>
-                            </nav>
+                    {/* Mobile Only Inquiry Button at the Absolute Bottom */}
+                    {isMobile && (
+                        <div style={{ width: '100%', marginTop: 'auto' }}>
+                            <a
+                                href="#inquiry"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    const element = document.getElementById('inquiry');
+                                    if (element) {
+                                        const offset = 80;
+                                        const bodyRect = document.body.getBoundingClientRect().top;
+                                        const elementRect = element.getBoundingClientRect().top;
+                                        const elementPosition = elementRect - bodyRect;
+                                        const offsetPosition = elementPosition - offset;
+
+                                        window.scrollTo({
+                                            top: offsetPosition,
+                                            behavior: 'smooth'
+                                        });
+                                    }
+                                    closeMenu();
+                                }}
+                                className="button w-button"
+                                style={{
+                                    width: '100%',
+                                    height: '46px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: '#0ebb45',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: '600'
+                                }}
+                            >
+                                구독문의
+                            </a>
                         </div>
-                    </div>
+                    )}
                 </nav>
-                <div className="navbar13_button-wrapper">
-                    <Link href="#inquiry" className="button is-small w-button">구독문의</Link>
-                    <div className={`navbar13_menu-button w-nav-button ${isMenuOpen ? 'w--open' : ''}`} onClick={toggleMenu}>
-                        <div className="menu-icon2">
-                            <div className="menu-icon2_line-top"></div>
-                            <div className="menu-icon2_line-middle">
-                                <div className="menu-icon1_line-middle-inner"></div>
+
+                <div className="navbar13_button-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingRight: isMobile ? '0' : '0' }}>
+                    <Link href="#inquiry" className="button is-small w-button" style={{
+                        display: isMobile ? 'none' : 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '0.75rem 1.5rem',
+                        backgroundColor: '#0ebb45',
+                        color: 'white',
+                        borderRadius: '30px',
+                        fontWeight: '600'
+                    }}>구독문의</Link>
+
+                    {isMobile && (
+                        <div
+                            className={`navbar13_menu-button w-nav-button ${isMenuOpen ? 'w--open' : ''}`}
+                            onClick={toggleMenu}
+                            style={{
+                                backgroundColor: isMenuOpen ? '#e5e5e5' : 'transparent',
+                                borderRadius: '50%',
+                                transition: 'background-color 0.3s ease',
+                                display: 'block'
+                            }}
+                        >
+                            <div className="menu-icon2">
+                                <div className="menu-icon2_line-top" style={{ transform: isMenuOpen ? 'translateY(8px) rotate(45deg)' : 'none' }}></div>
+                                <div className="menu-icon2_line-middle" style={{ opacity: isMenuOpen ? 0 : 1 }}></div>
+                                <div className="menu-icon2_line-bottom" style={{ transform: isMenuOpen ? 'translateY(-8px) rotate(-45deg)' : 'none' }}></div>
                             </div>
-                            <div className="menu-icon2_line-bottom"></div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
-            {isMenuOpen && <div className="w-nav-overlay" data-wf-ignore="" id="w-nav-overlay-0" style={{ height: '100vh', display: 'block' }} onClick={toggleMenu}></div>}
+            {isMenuOpen && isMobile && <div className="w-nav-overlay" data-wf-ignore="" id="w-nav-overlay-0" style={{ height: '100vh', display: 'block', backgroundColor: 'transparent', pointerEvents: 'auto' }} onClick={toggleMenu}></div>}
         </div>
     );
 }

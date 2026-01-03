@@ -66,7 +66,7 @@ export default function Footer() {
                                         </div>
                                     </div>
                                     <div className="w-layout-grid footer3_social-list">
-                                        <a href="#" className="footer3_social-link w-inline-block">
+                                        <a href="#!" onClick={(e) => e.preventDefault()} className="footer3_social-link w-inline-block" style={{ cursor: 'default' }}>
                                             <div className="icon-embed-xsmall icon-color-g400 w-embed">
                                                 <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path
@@ -76,7 +76,7 @@ export default function Footer() {
                                                 </svg>
                                             </div>
                                         </a>
-                                        <a href="#" className="footer3_social-link w-inline-block">
+                                        <a href="#!" onClick={(e) => e.preventDefault()} className="footer3_social-link w-inline-block" style={{ cursor: 'default' }}>
                                             <div className="icon-embed-xsmall icon-color-g400 w-embed">
                                                 <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path
@@ -88,7 +88,7 @@ export default function Footer() {
                                                 </svg>
                                             </div>
                                         </a>
-                                        <a href="#" className="footer3_social-link w-inline-block">
+                                        <a href="#!" onClick={(e) => e.preventDefault()} className="footer3_social-link w-inline-block" style={{ cursor: 'default' }}>
                                             <div className="icon-embed-xsmall icon-color-g400 w-embed">
                                                 <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path
@@ -98,7 +98,7 @@ export default function Footer() {
                                                 </svg>
                                             </div>
                                         </a>
-                                        <a href="#" className="footer3_social-link w-inline-block">
+                                        <a href="#!" onClick={(e) => e.preventDefault()} className="footer3_social-link w-inline-block" style={{ cursor: 'default' }}>
                                             <div className="icon-embed-xsmall icon-color-g400 w-embed">
                                                 <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path
@@ -110,7 +110,7 @@ export default function Footer() {
                                                 </svg>
                                             </div>
                                         </a>
-                                        <a href="#" className="footer3_social-link w-inline-block">
+                                        <a href="#!" onClick={(e) => e.preventDefault()} className="footer3_social-link w-inline-block" style={{ cursor: 'default' }}>
                                             <div className="icon-embed-xsmall icon-color-g400 w-embed">
                                                 <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path

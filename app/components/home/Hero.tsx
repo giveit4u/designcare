@@ -57,12 +57,11 @@ export default function Hero() {
                 >
                     <motion.div variants={itemVariants} className="margin-bottom margin-small">
                         <h1 className="heading-style-h1 break-keep">
-                            디자인 구독 서비스로 <br />
-                            비용절감과 경쟁력 높이세요
+                            디자인케어ㅣ채용보다 효율적인&nbsp;구독형 디자인 구독 서비스
                         </h1>
                     </motion.div>
-                    <motion.p variants={itemVariants} className="text-size-medium max-width-small break-keep">
-                        구인공고, 면접, 연봉협상 등 힘든 채용과정과 비용이 부담되시나요? 디자인 구독 서비스로 비용절감과 브랜드 경쟁력을 높여 드립니다.
+                    <motion.p variants={itemVariants} className="text-size-medium max-width-large break-keep">
+                        구인공고, 면접 등 힘든 채용 과정 없이 <strong className="font-bold">월 구독형</strong>으로 전담 디자인팀을 채용하세요. <strong className="font-bold">무제한 디자인 요청</strong>으로 비용 절감과 브랜드 경쟁력을 동시에 높여드립니다.
                     </motion.p>
                     <motion.div variants={itemVariants} className="margin-top margin-medium">
                         <div className="button-group">

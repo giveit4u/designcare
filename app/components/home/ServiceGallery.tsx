@@ -39,15 +39,15 @@ export default function ServiceGallery() {
                                             className="gallery6_image-wrapper group"
                                             transition={{ duration: 0.3, ease: "easeOut" }}
                                         >
-                                            <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm transition-shadow duration-300">
+                                            <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm transition-shadow duration-300 bg-white">
                                                 <Image
                                                     src={item.img}
                                                     alt={item.title}
                                                     fill
-                                                    className="object-cover transition-transform duration-500"
+                                                    className="object-cover transition-transform duration-500 opacity-85"
                                                 />
-                                                <div className="absolute inset-0 bg-black/5 p-4 flex flex-col justify-start">
-                                                    <h4 className="heading-style-h4 box bg-white/80 self-start px-3 py-1 rounded-[4px] backdrop-blur-sm">{item.title}</h4>
+                                                <div className="absolute inset-0 p-4 flex flex-col justify-start">
+                                                    <h4 className="heading-style-h4 box self-start">{item.title}</h4>
                                                 </div>
                                             </div>
                                             <p className="paragraph text-[#4b5563] text-sm leading-relaxed">{item.subtitle}</p>
@@ -61,15 +61,15 @@ export default function ServiceGallery() {
                                             className="gallery6_image-wrapper group"
                                             transition={{ duration: 0.3, ease: "easeOut" }}
                                         >
-                                            <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm transition-shadow duration-300">
+                                            <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 border border-[#e0e0e0] shadow-sm transition-shadow duration-300 bg-white">
                                                 <Image
                                                     src={item.img}
                                                     alt={item.title}
                                                     fill
-                                                    className="object-cover transition-transform duration-500"
+                                                    className="object-cover transition-transform duration-500 opacity-85"
                                                 />
-                                                <div className="absolute inset-0 bg-black/5 p-4 flex flex-col justify-start">
-                                                    <h4 className="heading-style-h4 box bg-white/80 self-start px-3 py-1 rounded-[4px] backdrop-blur-sm">{item.title}</h4>
+                                                <div className="absolute inset-0 p-4 flex flex-col justify-start">
+                                                    <h4 className="heading-style-h4 box self-start">{item.title}</h4>
                                                 </div>
                                             </div>
                                             <p className="paragraph text-[#4b5563] text-sm leading-relaxed">{item.subtitle}</p>

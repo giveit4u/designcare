@@ -128,11 +128,66 @@ o max 50% screen width (`maxWidth: 50vw`) to prevent overwhelming the screen.
     - **Speed Optimization**: Increased the flow speed by **30%** (1.56px/frame) as per user request to create a more dynamic and energetic visual experience.
 - **Reason**: To provide a top-tier, app-like interactive experience that feels fluid, responsive, and robust under all user interactions.
 
-#### 14. Service Gallery (Gallery6) Interaction Refinement
+- **Reason**: To prevent the page from jumping to the top when clicking on service items and to fulfill the user's request for a static presentation without hover/click movements.
+
+- **Reason**: To maintain visual consistency with other portfolio elements (e.g., Category images) and match the overall design language.
+
+#### 16. Hero Section Copy Update
+- **File**: `app/components/home/Hero.tsx`
+- **Change**: 
+    - **Main Heading**: Changed to "디자인케어ㅣ채용보다 효율적인 구독형 <br /> 디자인 구독 서비스". Removed unnecessary break and adjusted flow.
+    - **Forced Proportional Response & Extra Spacing**: 
+        - Applied `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)` to force equal 50:50 shrinking.
+        - Increased `grid-column-gap` to **`6rem`** to ensure a generous safety distance between text and images as the screen narrows.
+        - Result: The text wraps comfortably before getting too close to the images, maintaining a high-end, spacious feel throughout the responsive transition.
+- **Reason**: To prevent visual clutter and ensure text wraps with sufficient breathing room as requested.
+
+#### 17. Address Linting Error in Process.tsx
+- **File**: `app/components/home/Process.tsx`
+- **Change**: Explicitly typed Framer Motion variants using the `Variants` type.
+- **Reason**: To resolve the TypeScript error (TS2322) where `ease: "easeOut"` was incorrectly inferred as a generic string instead of a valid transition easing type.
+
+#### 18. Service Gallery Image Opacity Adjustment
 - **File**: `app/components/home/ServiceGallery.tsx`
 - **Change**: 
-    - Removed `whileHover={{ y: -8 }}` from the card container to stop vertical bouncing.
-    - Removed `group-hover:scale-110` from the images to disable zoom-in effect.
-    - Removed `group-hover:shadow-xl` to keep the card shadow consistent.
-    - **Click Prevention**: Changed the card container from a link (`motion.a`) to a `motion.div`.
-- **Reason**: To prevent the page from jumping to the top when clicking on service items and to fulfill the user's request for a static presentation without hover/click movements.
+    - Applied 15% transparency (`opacity: 0.85`) to the service items' images.
+    - Added `bg-white` to the image container to ensure images fade into a clean white background.
+    - Removed redundant Tailwind background and blur classes from the title tag to let the core CSS (`.heading-style-h4.box`) handle the black background consistently.
+- **Reason**: To enhance the readability and contrast of the black service title tags against the background images.
+
+#### 19. Disable Footer SNS Icon Interaction
+- **File**: `app/components/layout/Footer.tsx`
+- **Change**: 
+    - Replaced `href="#"` with `href="#!"` or added `onClick={(e) => e.preventDefault()}` for all SNS icons.
+    - Set `style={{ cursor: 'default' }}` to indicate they are currently non-clickable.
+- **Reason**: Per user request to remove the interaction that jumps to the top (Hero) until official SNS URLs are provided.
+
+#### 20. Web Optimization & SEO Enhancement
+- **File**: `app/page.tsx`, `app/components/home/Pricing.tsx`, `app/styles/design-care.webflow.css`, `app/layout.tsx`
+- **Changes**: 
+    - **Reordering**: Moved `Logos` section back to its original position above the `Footer` to improve social proof flow.
+    - **Translation**: Translated "Most Popular" to "가장 인기있는" in the Pricing section.
+    - **Lint Fix**: Fixed TypeScript lint error in `Pricing.tsx` by explicitly typing Framer Motion variants.
+    - **Responsive Fix**: Added a media query for intermediate screens (992px - 1200px) to switch Pricing to a 2-column layout for better readability.
+    - **SEO**: Updated meta title and description in `layout.tsx` with optimized keywords.
+
+#### 21. Hero Section Text Emphasis
+- **File**: `app/components/home/Hero.tsx`
+- **Change**: Added `font-bold` style to key phrases "월 구독형" and "무제한 디자인 요청".
+- **Reason**: To highlight core service benefits for better user attention.
+
+#### 22. Mobile Navbar Refinement (Full-Screen Menu)
+- **File**: `app/components/layout/Navbar.tsx`, `app/layout.tsx`
+- **Changes**:
+    - **Header Sizing**: Reduced mobile header height from `80px` to **`64px`** to remove "fatness". Adjusted logo size to `52px` to fit perfectly with 6px vertical/horizontal padding.
+    - **Full-Screen Menu**: 
+        - Implemented a full-screen overlay menu that starts **below** the floating header (`top: 84px`).
+        - Applied rounded top corners (`24px`) to the menu container.
+        - Background color set to **`#222222`** with **`#333333`** dividers.
+    - **Layout Adjustments**:
+        - Moved the "Consultation" (구독문의) button to the **absolute bottom** of the menu with `30px` padding.
+        - Aligned menu links to the top (`paddingTop: 50px`, `justify-content: flex-start`) to match user preference.
+        - Adjusted global padding for the header container to `6px` on mobile for a tighter, pill-like appearance.
+    - **Visual Cleanup**: Removed the default Webflow overlay opacity (`rgba(0,0,0,0.5)  -> transparent`) to achieve a clean, floating header effect.
+    - **Viewport Fix**: Added `maximum-scale=1, user-scalable=false` in `app/layout.tsx` to prevent unwanted auto-zooming on mobile inputs.
+- **Reason**: To match the specific "floating pill header + full-screen dark menu" aesthetic provided in the user's reference screenshots.

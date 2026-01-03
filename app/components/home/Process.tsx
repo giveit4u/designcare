@@ -1,10 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 export default function Process() {
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -14,7 +14,7 @@ export default function Process() {
         }
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { opacity: 0, y: 30 },
         visible: {
             opacity: 1,
@@ -89,7 +89,7 @@ export default function Process() {
 
                                     >
                                         <div className="margin-bottom margin-small">
-                                            <div className="layout297_image-wrapper" style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #ccc' }}>
+                                            <div className="layout297_image-wrapper" style={{ borderRadius: '9px', overflow: 'hidden', border: '1px solid #ccc' }}>
                                                 <Image
                                                     src={step.src}
                                                     alt={step.title}
