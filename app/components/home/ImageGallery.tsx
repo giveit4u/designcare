@@ -84,7 +84,7 @@ export default function ImageGallery() {
                 >
                     <motion.div
                         className="flex"
-                        animate={{ x: `calc(-${currentIndex} * min(36.66vw, 440px))` }}
+                        animate={{ x: `calc(-${currentIndex} * (min(36.66vw, 440px) + 2rem))` }}
                         transition={transitionEnabled ? {
                             type: "tween",
                             ease: [0.25, 0.1, 0.25, 1],
@@ -96,7 +96,7 @@ export default function ImageGallery() {
                             <div
                                 key={index}
                                 className="gallery22_slide flex-shrink-0"
-                                style={{ width: 'min(36.66vw, 440px)', paddingRight: '2rem' }}
+                                style={{ width: 'calc(min(36.66vw, 440px) + 2rem)', paddingRight: '2rem' }}
                             >
                                 <div className="gallery22_image-wrapper overflow-hidden rounded-[8px] border border-[#eee]">
                                     <Image
@@ -134,7 +134,7 @@ export default function ImageGallery() {
                                     onClick={handlePrev}
                                     className="w-[3rem] h-[3rem] flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
                                     initial={{ border: '1px solid #ccc', backgroundColor: '#ffffff', color: '#000000' }}
-                                    whileHover={{ backgroundColor: '#ccc', color: '#ffffff' }}
+                                    whileHover={{ backgroundColor: '#ccc', color: '#000000' }}
                                     aria-label="Previous Slide"
                                 >
                                     <div className="w-[1rem] h-[1rem] flex items-center justify-center">
@@ -147,7 +147,7 @@ export default function ImageGallery() {
                                     onClick={handleNext}
                                     className="w-[3rem] h-[3rem] flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
                                     initial={{ border: '1px solid #ccc', backgroundColor: '#ffffff', color: '#000000' }}
-                                    whileHover={{ backgroundColor: '#ccc', color: '#ffffff' }}
+                                    whileHover={{ backgroundColor: '#ccc', color: '#000000' }}
                                     aria-label="Next Slide"
                                 >
                                     <div className="w-[1rem] h-[1rem] flex items-center justify-center">

@@ -191,3 +191,15 @@ o max 50% screen width (`maxWidth: 50vw`) to prevent overwhelming the screen.
     - **Visual Cleanup**: Removed the default Webflow overlay opacity (`rgba(0,0,0,0.5)  -> transparent`) to achieve a clean, floating header effect.
     - **Viewport Fix**: Added `maximum-scale=1, user-scalable=false` in `app/layout.tsx` to prevent unwanted auto-zooming on mobile inputs.
 - **Reason**: To match the specific "floating pill header + full-screen dark menu" aesthetic provided in the user's reference screenshots.
+#### 23. Image Gallery Refinements (Gallery 22)
+- **File**: `app/components/home/ImageGallery.tsx`
+- **Changes**:
+    - **Sizing & Spacing**: Increased image max-width to `440px` (+10%) and set a consistent `2rem` (32px) gap.
+    - **Alignment & Clipping**: Precision-aligned the first image with the text content's left margin using dynamic `marginLeft` and `clipPath: inset(0 -100vw 0 0)`.
+    - **Infinite Loop**: Implemented a seamless manual slider by tripling the image array and using `onAnimationComplete` to snap indices back for a continuous loop.
+    - **Navigation UI**: 
+        - Styled arrow buttons with `#ccc` border and white background.
+        - Set hover state to `#ccc` background and black icon for better visibility.
+    - **Interaction Cleanup**: Removed `hover:scale` effect from images to maintain a clean, static presentation.
+    - **Animation**: Applied `tween` transition with `cubic-bezier([0.25, 0.1, 0.25, 1])` and `0.6s` duration for professional motion.
+- **Reason**: To match the Webflow design's precise alignment and functional requirements while delivering a premium user experience.
